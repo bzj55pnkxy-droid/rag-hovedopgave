@@ -20,9 +20,15 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+# Virtual environments
 venv/
 env/
 ENV/
+.venv/
+
+# UV specific
+.python-version
 
 # IDEs
 .vscode/
