@@ -3,7 +3,7 @@ title: "Compilers: The Translators of the Programming World"
 description: "Understand how compilers translate code to machine language, optimization, and compiled vs interpreted languages"
 category: "Computer Science Fundamentals"
 tags: ["compilers", "programming-languages", "optimization", "computer-science"]
-difficulty: "intermediate"
+difficulty: "beginner"
 ---
 
 # Compilers: The Translators of the Programming World

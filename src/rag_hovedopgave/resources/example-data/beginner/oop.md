@@ -3,7 +3,7 @@ title: "Object-Oriented Programming: Building with Digital LEGOs"
 description: "Master OOP concepts: classes, objects, inheritance, encapsulation, polymorphism, and abstraction"
 category: "Programming Paradigms"
 tags: ["oop", "object-oriented", "classes", "inheritance", "programming"]
-difficulty: "intermediate"
+difficulty: "beginner"
 ---
 
 # Object-Oriented Programming: Building with Digital LEGOs

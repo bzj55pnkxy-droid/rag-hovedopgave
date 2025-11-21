@@ -3,7 +3,7 @@ title: "Static Analysis: X-Ray Vision for Your Code"
 description: "Understand static analysis tools, bug detection, security scanning, and code quality analysis"
 category: "Code Quality"
 tags: ["static-analysis", "code-quality", "security", "bug-detection", "tools"]
-difficulty: "intermediate"
+difficulty: "beginner"
 ---
 
 # Static Analysis: X-Ray Vision for Your Code

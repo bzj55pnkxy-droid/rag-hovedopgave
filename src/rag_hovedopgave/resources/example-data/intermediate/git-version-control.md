@@ -3,7 +3,7 @@ title: "Git & Version Control: Time Machine for Your Code"
 description: "Learn Git commands, branching, merging, collaboration, and version control best practices"
 category: "Development Tools"
 tags: ["git", "version-control", "github", "collaboration", "development"]
-difficulty: "beginner"
+difficulty: "intermediate"
 ---
 
 # Git & Version Control: Time Machine for Your Code

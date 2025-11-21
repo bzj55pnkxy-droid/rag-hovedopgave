@@ -3,7 +3,7 @@ title: "JSON: A Simple Way to Share Data"
 description: "Learn JSON syntax, data types, structure, and how to use JSON for data exchange"
 category: "Data Formats"
 tags: ["json", "data-formats", "apis", "web-development"]
-difficulty: "beginner"
+difficulty: "intermediate"
 ---
 
 # JSON: A Simple Way to Share Data

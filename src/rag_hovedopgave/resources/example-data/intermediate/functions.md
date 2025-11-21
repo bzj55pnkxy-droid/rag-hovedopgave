@@ -3,7 +3,7 @@ title: "Functions: Reusable Blocks of Code"
 description: "Master functions, parameters, return values, scope, and how to write reusable code"
 category: "Programming Fundamentals"
 tags: ["functions", "programming", "code-reusability", "fundamentals"]
-difficulty: "beginner"
+difficulty: "intermediate"
 ---
 
 # Functions: Reusable Blocks of Code

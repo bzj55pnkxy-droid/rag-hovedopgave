@@ -3,7 +3,7 @@ title: "Software Testing: Making Sure Your Code Actually Works"
 description: "Learn about unit tests, integration tests, TDD, mocking, and testing best practices"
 category: "Software Testing"
 tags: ["testing", "unit-tests", "tdd", "quality-assurance", "development"]
-difficulty: "beginner"
+difficulty: "intermediate"
 ---
 
 # Software Testing: Making Sure Your Code Actually Works

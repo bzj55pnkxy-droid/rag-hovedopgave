@@ -3,7 +3,7 @@ title: "Databases: Where Apps Remember Everything"
 description: "Explore SQL and NoSQL databases, queries, tables, relationships, and data persistence"
 category: "Backend Development"
 tags: ["databases", "sql", "nosql", "data-storage", "backend"]
-difficulty: "beginner"
+difficulty: "intermediate"
 ---
 
 # Databases: Where Apps Remember Everything

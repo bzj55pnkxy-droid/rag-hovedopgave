@@ -3,7 +3,7 @@ title: "Variables: Boxes for Storing Information"
 description: "Learn about variables, data types, scope, naming conventions, and variable best practices"
 category: "Programming Fundamentals"
 tags: ["variables", "data-types", "programming", "fundamentals", "basics"]
-difficulty: "beginner"
+difficulty: "intermediate"
 ---
 
 # Variables: Boxes for Storing Information

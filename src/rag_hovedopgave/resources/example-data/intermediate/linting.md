@@ -3,7 +3,7 @@ title: "Linting: Your Code's Personal Spell Checker"
 description: "Learn about linters, code style, auto-fixing, and maintaining code quality standards"
 category: "Code Quality"
 tags: ["linting", "code-quality", "style", "best-practices", "development"]
-difficulty: "beginner"
+difficulty: "intermediate"
 ---
 
 # Linting: Your Code's Personal Spell Checker

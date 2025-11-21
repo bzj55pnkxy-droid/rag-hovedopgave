@@ -3,7 +3,7 @@ title: "Debugging: Finding and Fixing Bugs in Your Code"
 description: "Master debugging techniques, tools, error messages, and strategies for finding and fixing bugs"
 category: "Development Practices"
 tags: ["debugging", "error-handling", "troubleshooting", "development"]
-difficulty: "beginner"
+difficulty: "intermediate"
 ---
 
 # Debugging: Finding and Fixing Bugs in Your Code

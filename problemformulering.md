@@ -7,7 +7,7 @@ Generic AI assistants (ChatGPT, GitHub Copilot) provide technically correct but 
 ORMs, connection pooling, and transactions—concepts they haven't learned yet. This creates confusion rather than learning.
 
 Solution:
-A RAG-powered learning assistant that grounds responses in curriculum-appropriate materials. By indexing structured educational content (markdown files with metadata about semester, difficulty,
+A RAG-powered learning assistant that grounds  responses in curriculum-appropriate materials. By indexing structured educational content (markdown files with metadata about semester, difficulty,
 prerequisites), the system provides answers aligned with what students should know at their current stage.
 
 Core Features for PoC:

@@ -3,7 +3,7 @@ title: "Data Structures: Organizing Information Like a Pro"
 description: "Learn about arrays, lists, stacks, queues, trees, graphs, and how to organize data efficiently"
 category: "Computer Science Fundamentals"
 tags: ["data-structures", "algorithms", "arrays", "trees", "graphs"]
-difficulty: "beginner"
+difficulty: "intermediate"
 ---
 
 # Data Structures: Organizing Information Like a Pro

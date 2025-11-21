@@ -3,7 +3,7 @@ title: "Docker: Like Shipping Containers for Your Code"
 description: "Learn about Docker containers, images, Dockerfile, and how to package applications for consistent deployment"
 category: "DevOps"
 tags: ["docker", "containers", "deployment", "devops", "virtualization"]
-difficulty: "intermediate"
+difficulty: "beginner"
 ---
 
 # Docker: Like Shipping Containers for Your Code
