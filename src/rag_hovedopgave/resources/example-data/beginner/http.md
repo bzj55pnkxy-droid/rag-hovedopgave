@@ -1,3 +1,11 @@
+---
+title: "HTTP: How Computers Talk to Each Other"
+description: "Understand HTTP methods, status codes, requests, responses, and web communication protocols"
+category: "Web Development"
+tags: ["http", "web", "networking", "protocols", "apis"]
+difficulty: "beginner"
+---
+
 # HTTP: How Computers Talk to Each Other
 
 ## What is HTTP?
