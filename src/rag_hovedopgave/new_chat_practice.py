@@ -1,3 +1,5 @@
+from typing import Annotated, TypedDict
+
 from anthropic.types import ModelParam
 from dotenv import load_dotenv
 from langchain_anthropic import ChatAnthropic
@@ -5,6 +7,8 @@ from langchain_chroma.vectorstores import Chroma
 from langchain_cohere.embeddings import CohereEmbeddings
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_text_splitters import MarkdownHeaderTextSplitter
+from langgraph.graph import END, START, StateGraph
+from langgraph.graph.message import add_messages
 
 load_dotenv()
 
@@ -32,15 +36,18 @@ for doc in docs:
     all_splits.extend(markdown_splitter.split_text(doc.page_content))
     # Extract 'difficulty' front-matter value and add it to the document metadata
     import re
-    frontmatter_match = re.match(r"^---\n(.*?)\n---", doc.page_content, re.DOTALL)
+
+    frontmatter_match = re.match(
+        r"^---\n(.*?)\n---", doc.page_content, re.DOTALL
+    )
     if frontmatter_match:
         frontmatter = frontmatter_match.group(1)
-        difficulty_match = re.search(r'difficulty:\s*["\']?([A-Za-z0-9_-]+)["\']?', frontmatter)
+        difficulty_match = re.search(
+            r'difficulty:\s*["\']?([A-Za-z0-9_-]+)["\']?', frontmatter
+        )
         if difficulty_match:
-            doc.metadata['difficulty'] = difficulty_match.group(1)
+            doc.metadata["difficulty"] = difficulty_match.group(1)
 
-    print(doc.metadata)
-    
 model = ChatAnthropic(model="claude-haiku-4-5-20251001")
 
 embeddings = CohereEmbeddings(model="embed-v4.0")
@@ -54,9 +61,19 @@ vector_store = Chroma(
 
 vector_store.add_documents(all_splits)
 
-# To print the first entry in your vector store, you need to retrieve it using the appropriate method.
-# Chroma does not support direct indexing like vector_store[0]. You can use .get or .as_retriever().get_relevant_documents.
 
-# Example: Fetch the first document added (if you want to inspect the raw data)
-first_doc = vector_store.get(ids=[vector_store._collection.get()['ids'][0]])['documents'][0]
-print(first_doc)
+class State(TypedDict):
+    # Messages have the type "list". The `add_messages`
+    # function in the annotation defines how this state should
+    # be updated (in this case, it appends new messages to the
+    # list, rather than replacing the previous messages)
+    messages: Annotated[list, add_messages]
+
+
+builder = StateGraph(State)
+
+# # Example: Fetch the first document added (if you want to inspect the raw data)
+# first_doc = vector_store.get(ids=[vector_store._collection.get()["ids"][0]])[
+#     "documents"
+# ][0]
+# print(first_doc)
