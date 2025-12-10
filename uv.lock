@@ -601,6 +601,20 @@ wheels = [
 ]
 
 [[package]]
+name = "fastapi-ai-sdk"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "fastapi" },
+    { name = "pydantic" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/37/36/00ca91a31ec24f9b7dfedec10c7c88cc347b10900339f70f47ce5bc5c585/fastapi_ai_sdk-0.1.0.tar.gz", hash = "sha256:19353d99c8f86a3ae27cbf8855017a169c31fd906c71c155ba005d9f1e892370", size = 31192, upload-time = "2025-09-25T21:42:38.762Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c7/1b/cd8987b569d8503065652c9d381891bdec8b049174f6939b8c0461a21954/fastapi_ai_sdk-0.1.0-py3-none-any.whl", hash = "sha256:a8b399c71ae89b527f305ac00cec5840e50dad7e36765070e7b099e7dbba99a0", size = 14844, upload-time = "2025-09-25T21:42:37.117Z" },
+]
+
+[[package]]
 name = "fastavro"
 version = "1.12.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2516,6 +2530,7 @@ dependencies = [
     { name = "chromadb" },
     { name = "cohere" },
     { name = "fastapi" },
+    { name = "fastapi-ai-sdk" },
     { name = "langchain" },
     { name = "langchain-anthropic" },
     { name = "langchain-chroma" },
@@ -2545,6 +2560,7 @@ requires-dist = [
     { name = "chromadb", specifier = ">=1.3.0" },
     { name = "cohere", specifier = ">=5.20.0" },
     { name = "fastapi", specifier = ">=0.120.4" },
+    { name = "fastapi-ai-sdk", specifier = ">=0.1.0" },
     { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.27.0" },
     { name = "langchain", specifier = ">=1.0.3" },
     { name = "langchain-anthropic" },

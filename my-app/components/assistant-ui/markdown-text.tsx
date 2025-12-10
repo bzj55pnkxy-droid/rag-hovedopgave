@@ -67,10 +67,11 @@ const useCopyToClipboard = ({
 };
 
 const defaultComponents = memoizeMarkdownComponents({
+  // Toned-down header styles - less dramatic sizing
   h1: ({ className, ...props }) => (
     <h1
       className={cn(
-        "aui-md-h1 mb-8 scroll-m-20 text-4xl font-extrabold tracking-tight last:mb-0",
+        "aui-md-h1 mb-2 text-lg font-semibold first:mt-0 last:mb-0",
         className,
       )}
       {...props}
@@ -79,7 +80,7 @@ const defaultComponents = memoizeMarkdownComponents({
   h2: ({ className, ...props }) => (
     <h2
       className={cn(
-        "aui-md-h2 mt-8 mb-4 scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 last:mb-0",
+        "aui-md-h2 mt-4 mb-2 text-base font-semibold first:mt-0 last:mb-0",
         className,
       )}
       {...props}
@@ -88,7 +89,7 @@ const defaultComponents = memoizeMarkdownComponents({
   h3: ({ className, ...props }) => (
     <h3
       className={cn(
-        "aui-md-h3 mt-6 mb-4 scroll-m-20 text-2xl font-semibold tracking-tight first:mt-0 last:mb-0",
+        "aui-md-h3 mt-3 mb-2 text-base font-medium first:mt-0 last:mb-0",
         className,
       )}
       {...props}
@@ -97,7 +98,7 @@ const defaultComponents = memoizeMarkdownComponents({
   h4: ({ className, ...props }) => (
     <h4
       className={cn(
-        "aui-md-h4 mt-6 mb-4 scroll-m-20 text-xl font-semibold tracking-tight first:mt-0 last:mb-0",
+        "aui-md-h4 mt-3 mb-2 text-base font-medium first:mt-0 last:mb-0",
         className,
       )}
       {...props}

@@ -25,7 +25,7 @@ import {
 export const Assistant = () => {
   const runtime = useChatRuntime({
     transport: new AssistantChatTransport({
-      api: "http://localhost:8000/api/chat",
+      api: "http://localhost:8080/api/chat",
     }),
   });
 
