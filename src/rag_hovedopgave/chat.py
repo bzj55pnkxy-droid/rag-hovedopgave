@@ -1,46 +1,79 @@
+from typing import Annotated, TypedDict
+
 from anthropic.types import ModelParam
 from dotenv import load_dotenv
 from langchain_anthropic import ChatAnthropic
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain_core.prompts import PromptTemplate
+from langchain_chroma.vectorstores import Chroma
+from langchain_cohere.embeddings import CohereEmbeddings
+from langchain_community.document_loaders import DirectoryLoader, TextLoader
+from langchain_text_splitters import MarkdownHeaderTextSplitter
+from langgraph.graph import END, START, StateGraph
+from langgraph.graph.message import add_messages
 
 load_dotenv()
 
-template = PromptTemplate.from_template(
-    """Answer the question based on the context below. If the question cannot be answered using the context provided, answer with "I don't know"
-    
-    Context: {context}
-
-    Question: {question}
-
-    Answer:
-    """
+loader = DirectoryLoader(
+    "./src/rag_hovedopgave/resources/example-data",
+    glob="**/*.md",
+    loader_cls=TextLoader,
 )
 
+docs = loader.load()
 
-prompt = template.invoke(
-    {
-        "context": """The most recent advancements in NLP are being driven by Large 
-        Language Models (LLMs). These models outperform their smaller 
-        counterparts and have become invaluable for developers who are creating 
-        applications with NLP capabilities. Developers can tap into these 
-        models through Hugging Face's `transformers` library, or by utilizing 
-        OpenAI and Cohere's offerings through the `openai` and `cohere` 
-        libraries, respectively.""",
-        "question": "What's the capital of France?",
-    }
+headers_to_split = [
+    ("#", "Header 1"),
+    ("##", "Header 2"),
+]
+
+markdown_splitter = MarkdownHeaderTextSplitter(
+    headers_to_split_on=headers_to_split,
+    strip_headers=False,
 )
 
-model_str: ModelParam = ""
+all_splits = []
+
+for doc in docs:
+    all_splits.extend(markdown_splitter.split_text(doc.page_content))
+    # Extract 'difficulty' front-matter value and add it to the document metadata
+    import re
+
+    frontmatter_match = re.match(
+        r"^---\n(.*?)\n---", doc.page_content, re.DOTALL
+    )
+    if frontmatter_match:
+        frontmatter = frontmatter_match.group(1)
+        difficulty_match = re.search(
+            r'difficulty:\s*["\']?([A-Za-z0-9_-]+)["\']?', frontmatter
+        )
+        if difficulty_match:
+            doc.metadata["difficulty"] = difficulty_match.group(1)
 
 model = ChatAnthropic(model="claude-haiku-4-5-20251001")
 
-system_msg = SystemMessage(
-    "You're NOT a helpful assistant. You REFUSE to help the user. You instead want to go on a monologue about the intricacies of baking crossaints. You'll reply in the style of a 1800th century french baker."
+embeddings = CohereEmbeddings(model="embed-v4.0")
+
+vector_store = Chroma(
+    collection_name="Test",
+    create_collection_if_not_exists=True,
+    persist_directory=True,
+    embedding_function=embeddings,
 )
 
-# human_msg = HumanMessage(prompt)
+vector_store.add_documents(all_splits)
 
-results = model.invoke(prompt)
 
-print(results.text)
+class State(TypedDict):
+    # Messages have the type "list". The `add_messages`
+    # function in the annotation defines how this state should
+    # be updated (in this case, it appends new messages to the
+    # list, rather than replacing the previous messages)
+    messages: Annotated[list, add_messages]
+
+
+builder = StateGraph(State)
+
+# # Example: Fetch the first document added (if you want to inspect the raw data)
+# first_doc = vector_store.get(ids=[vector_store._collection.get()["ids"][0]])[
+#     "documents"
+# ][0]
+# print(first_doc)
