@@ -1,6 +1,4 @@
-import asyncio
 import uuid
-from typing import Dict, List
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
