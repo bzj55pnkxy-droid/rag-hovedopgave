@@ -54,6 +54,7 @@ async def root(request: ChatRequest):
         elif msg.role == "assistant":
             langchain_messages.append(AIMessage(content=text_content))
 
+    # Tool-calling loop: uses ainvoke because we need the full response to detect tool calls
     while True:
         response = await model_with_tools.ainvoke(langchain_messages)
 
@@ -67,19 +68,7 @@ async def root(request: ChatRequest):
                 ToolMessage(content=str(result), tool_call_id=tool_call["id"])
             )
 
-    if isinstance(response.content, str):
-        final_content = response.content
-    elif isinstance(response.content, list):
-        text_parts = []
-        for block in response.content:
-            if isinstance(block, dict) and block.get("type") == "text":
-                text_parts.append(block.get("text", ""))
-            elif isinstance(block, str):
-                text_parts.append(block)
-        final_content = "".join(text_parts)
-    else:
-        final_content = str(response.content) if response.content else ""
-
+    # Final answer: stream token-by-token using astream
     async def stream_response():
         message_id = f"msg_{uuid.uuid4().hex[:8]}"
         text_id = f"txt_{uuid.uuid4().hex[:8]}"
@@ -87,8 +76,9 @@ async def root(request: ChatRequest):
         yield StartEvent(message_id=message_id).to_sse()
         yield TextStartEvent(id=text_id).to_sse()
 
-        if final_content:
-            yield TextDeltaEvent(id=text_id, delta=final_content).to_sse()
+        async for chunk in model.astream(langchain_messages):
+            if chunk.content:
+                yield TextDeltaEvent(id=text_id, delta=chunk.content).to_sse()
 
         yield TextEndEvent(id=text_id).to_sse()
         yield FinishEvent().to_sse()
