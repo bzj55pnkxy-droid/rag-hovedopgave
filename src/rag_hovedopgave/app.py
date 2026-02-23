@@ -4,8 +4,6 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_ai_sdk import (
-    AIStreamBuilder,
-    ai_endpoint,
     create_ai_stream_response,
 )
 from fastapi_ai_sdk.models import (
@@ -16,9 +14,10 @@ from fastapi_ai_sdk.models import (
     TextStartEvent,
 )
 from langchain_anthropic import ChatAnthropic
-from langchain_core.messages import AIMessage, HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 
 from .models import ChatRequest
+from .tools.tools import search_curriculum
 
 load_dotenv()
 
@@ -37,6 +36,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 model = ChatAnthropic(model="claude-haiku-4-5-20251001", streaming=True)
+model_with_tools = model.bind_tools([search_curriculum])
 
 
 @app.post("/api/chat")
@@ -54,19 +54,43 @@ async def root(request: ChatRequest):
         elif msg.role == "assistant":
             langchain_messages.append(AIMessage(content=text_content))
 
+    while True:
+        response = await model_with_tools.ainvoke(langchain_messages)
+
+        if not response.tool_calls:
+            break
+
+        langchain_messages.append(response)
+        for tool_call in response.tool_calls:
+            result = search_curriculum.invoke(tool_call["args"])
+            langchain_messages.append(
+                ToolMessage(content=str(result), tool_call_id=tool_call["id"])
+            )
+
+    if isinstance(response.content, str):
+        final_content = response.content
+    elif isinstance(response.content, list):
+        text_parts = []
+        for block in response.content:
+            if isinstance(block, dict) and block.get("type") == "text":
+                text_parts.append(block.get("text", ""))
+            elif isinstance(block, str):
+                text_parts.append(block)
+        final_content = "".join(text_parts)
+    else:
+        final_content = str(response.content) if response.content else ""
+
     async def stream_response():
-        message_id = f"txt_{uuid.uuid4().hex[:8]}"
+        message_id = f"msg_{uuid.uuid4().hex[:8]}"
         text_id = f"txt_{uuid.uuid4().hex[:8]}"
 
         yield StartEvent(message_id=message_id).to_sse()
-
         yield TextStartEvent(id=text_id).to_sse()
 
-        async for chunk in model.astream(langchain_messages):
-            yield TextDeltaEvent(id=text_id, delta=chunk.content).to_sse()
+        if final_content:
+            yield TextDeltaEvent(id=text_id, delta=final_content).to_sse()
 
         yield TextEndEvent(id=text_id).to_sse()
-
         yield FinishEvent().to_sse()
 
     return create_ai_stream_response(stream_response())
