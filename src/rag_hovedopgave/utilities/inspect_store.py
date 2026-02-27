@@ -10,7 +10,6 @@ vector_store = Chroma(
     embedding_function=embeddings,
 )
 
-# Search and display results nicely
 results = vector_store.similarity_search("What is a database?", k=10)
 print(f"\nFound {len(results)} results:\n")
 for i, doc in enumerate(results, 1):

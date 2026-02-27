@@ -14,7 +14,12 @@ from fastapi_ai_sdk.models import (
     TextStartEvent,
 )
 from langchain_anthropic import ChatAnthropic
-from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
+from langchain_core.messages import (
+    AIMessage,
+    HumanMessage,
+    SystemMessage,
+    ToolMessage,
+)
 
 from .models import ChatRequest
 from .tools.tools import search_curriculum
@@ -35,13 +40,25 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+SYSTEM_PROMPT = """\
+You are a helpful study assistant for Datamatiker students. You help students \
+understand programming concepts from their curriculum.
+
+Before answering a question, check if the student has mentioned which semester \
+they are in (1st or 2nd). If they haven't, ask them which semester they are \
+currently enrolled in before searching the curriculum. Once you know their \
+semester, use it when searching for relevant material.
+
+Keep your answers clear and appropriate for the student's level and semester pre-requisites.\
+"""
+
 model = ChatAnthropic(model="claude-haiku-4-5-20251001", streaming=True)
 model_with_tools = model.bind_tools([search_curriculum])
 
 
 @app.post("/api/chat")
 async def root(request: ChatRequest):
-    langchain_messages = []
+    langchain_messages = [SystemMessage(content=SYSTEM_PROMPT)]
     for msg in request.messages:
         text_content = msg.content
         if not msg.content and msg.parts:
@@ -54,7 +71,7 @@ async def root(request: ChatRequest):
         elif msg.role == "assistant":
             langchain_messages.append(AIMessage(content=text_content))
 
-    # Tool-calling loop: uses ainvoke because we need the full response to detect tool calls
+
     while True:
         response = await model_with_tools.ainvoke(langchain_messages)
 
@@ -68,7 +85,7 @@ async def root(request: ChatRequest):
                 ToolMessage(content=str(result), tool_call_id=tool_call["id"])
             )
 
-    # Final answer: stream token-by-token using astream
+    # stream token-by-token using astream
     async def stream_response():
         message_id = f"msg_{uuid.uuid4().hex[:8]}"
         text_id = f"txt_{uuid.uuid4().hex[:8]}"
